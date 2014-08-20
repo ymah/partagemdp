@@ -6,8 +6,6 @@ if ( !file_exists($pathSession) ) {
 }
 
 session_save_path('temp/');
-if(!isset($_SESSION))
-    session_start();
 
 ?>
 
@@ -30,7 +28,6 @@ if(!isset($_SESSION))
 if(isset($_GET['id'])){
     
     include('client.php');
-   var_dump($_SESSION);
 
 }else if(isset($_POST['key'])){
     include('verif_client.php');

@@ -2,7 +2,7 @@
 session_start();
 
 $i = 0;
-while($i < 256) {
+while($i < 128) {
     $c = mt_rand(1, 9); // On génère le nombre aléatoire
     $cs[$i] = $c;
     $i++;

@@ -1,4 +1,5 @@
 <?php
+include('Crypt/RSA.php');
 $dir = 'key';
 
 if ( !file_exists($dir) ) {
@@ -23,16 +24,40 @@ function curPageURL() {
 
 
 
-
-
 if(isset($_POST['id']) and isset($_POST['mdp'])){
-    $nom=time();
-    if(!file_put_contents("key/$nom.dat",$_POST['id']."|".$_POST['mdp']))//on enregistre le resultat dans le fichier de sortie
+    $time=time();
+    $id = htmlspecialchars($_POST['id'], ENT_COMPAT,'ISO-8859-1', true);
+    $mdp = htmlspecialchars($_POST['mdp'], ENT_COMPAT,'ISO-8859-1', true);
+
+
+    $rsa = new Crypt_RSA();
+    extract($rsa->createKey(1024));
+    $rsa->loadKey($publickey);
+    
+    $resID = $rsa->encrypt($id);
+    $resMDP = $rsa->encrypt($mdp);
+    
+    if(!file_put_contents("key/$time.crt","$resID;$resMDP;$publickey"))//on enregistre le resultat dans le fichier de sortie
         echo 'Exception reçue : erreur ecriture dans le fichier<br/>';
 
-    $lien = curPageURL()."index.php?id=$nom";
-    echo $lien;
+    $lien = curPageURL()."?id=$time";
+    
 
+    echo "<table>
+<tr>
+<td>Identifiant</td>
+<td>$id</td>
+</tr>
+<tr>
+<td>Clé privée de decryptage</td>
+<td>$privatekey<br/><br/></td>
+</tr>
+<tr>
+<td>Lien</td>
+<td>$lien</td>
+</tr>
+
+</table>";
 }else {
 
 
@@ -43,11 +68,4 @@ if(isset($_POST['id']) and isset($_POST['mdp'])){
     <p><label>Mot de passe: </label><input name="mdp" type="text"/></p>
     <p><input type="submit" value="valider"/>
     </form>
-
-
-
-
-
-
-
 <?php } ?>
