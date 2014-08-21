@@ -1,5 +1,4 @@
 <?php 
-session_start();
 
 $i = 0;
 while($i < 128) {

@@ -1,11 +1,20 @@
 <?php
 include('Crypt/RSA.php');
+include('Crypt/AES.php');
 $dir = 'key';
 
 if ( !file_exists($dir) ) {
     mkdir ($dir, 0770);
 }
-
+function generateRandomString($length = 8) {
+    $characters = '0123456789abcdefghijklmnopqrstuvwxyz';
+    $randomString = '';
+    $l = strlen($characters);
+    for ($i = 0; $i < $length; $i++) {
+        $randomString .= $characters[mt_rand(0, $l - 1)];
+    }
+    return $randomString;
+}
 
 function curPageURL() {
     $pageURL = 'http';
@@ -29,9 +38,9 @@ if(isset($_POST['id']) and isset($_POST['mdp'])){
     $id = htmlspecialchars($_POST['id'], ENT_COMPAT,'ISO-8859-1', true);
     $mdp = htmlspecialchars($_POST['mdp'], ENT_COMPAT,'ISO-8859-1', true);
 
-
+    
     $rsa = new Crypt_RSA();
-    extract($rsa->createKey(1024));
+    extract($rsa->createKey(1500));
     $rsa->loadKey($publickey);
     
     $resID = $rsa->encrypt($id);
@@ -39,10 +48,14 @@ if(isset($_POST['id']) and isset($_POST['mdp'])){
     
     if(!file_put_contents("key/$time.crt","$resID;$resMDP;$publickey"))//on enregistre le resultat dans le fichier de sortie
         echo 'Exception reçue : erreur ecriture dans le fichier<br/>';
-
-    $lien = curPageURL()."?id=$time";
     
-
+    $lien = curPageURL()."?id=$time";
+    $pk = generateRandomString();
+    echo $pk;
+    $des = new Crypt_AES();
+    $des->setKey($pk);
+    $cle = base64_encode($des->encrypt($privatekey));
+    
     echo "<table>
 <tr>
 <td>Identifiant</td>
@@ -50,9 +63,15 @@ if(isset($_POST['id']) and isset($_POST['mdp'])){
 </tr>
 <tr>
 <td>Clé privée de decryptage</td>
-<td>$privatekey<br/><br/></td>
+<td>$cle<br/><br/></td>
 </tr>
 <tr>
+<td>Clé des</td>
+<td>$pk<br/><br/></td>
+</tr>
+<tr>
+<tr>
+
 <td>Lien</td>
 <td>$lien</td>
 </tr>

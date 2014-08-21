@@ -1,10 +1,14 @@
 <?php 
-session_start();
 $get = htmlspecialchars($_GET['id'], ENT_COMPAT,'ISO-8859-1', true);
 $now = time();
 $_SESSION['temp'] = $get;
 if(($now - $get) <= 3600){
+    include('verif_code_gen.php');
+var_dump($nombre);
+var_dump($_SESSION['captcha']);
+
 ?>
+    
 <form action="index.php" method="post">
   <p>
     <label>
@@ -13,7 +17,7 @@ if(($now - $get) <= 3600){
     <textarea name="key" row="10" cols="50"></textarea>
   </p>
   <p>
-      <img src="verif_code_gen.php" alt="Code de vérification" />
+      <img src="image.php" alt="Code de vérification" />
   </p>
   <p>
     <label>
@@ -38,6 +42,7 @@ if(($now - $get) <= 3600){
 
 }
 
-var_dump($_SESSION); 
+var_dump($nombre);
+var_dump($_SESSION['captcha']);
 
 ?>
