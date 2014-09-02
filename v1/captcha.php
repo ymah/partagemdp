@@ -1,3 +1,55 @@
+<<<<<<< HEAD
+<?php
+// On crée la session avant tout
+session_save_path('file/temp');
+
+session_start();
+
+// On définit la configuration :
+$nbr_chiffres = 10; // Nombre de chiffres qui formeront le nombre
+
+// Là, on définit le header de la page pour la transformer en image
+header ("Content-type: image/png");
+// Là, on crée notre image
+$_img = imagecreatefromjpeg('noir.jpg');
+
+// On définit maintenant les couleurs
+// Couleur de fond :
+$arriere_plan = imagecolorallocate($_img, 0, 0, 0); // Au cas où on n'utiliserait pas d'image de fond, on utilise cette couleur-là.
+// Autres couleurs :
+$r = mt_rand(125,255);
+$v = mt_rand(125,255);
+$b = mt_rand(125,255);
+$avant_plan = imagecolorallocate($_img, $r, $v, $b); // Couleur des chiffres
+
+##### Ici on crée la variable qui contiendra le nombre aléatoire #####
+$i = 0;
+while($i < $nbr_chiffres) {
+    $chiffre = mt_rand(0, 9); // On génère le nombre aléatoire
+    $chiffres[$i] = $chiffre;
+    $i++;
+}
+$nombre = null;
+// On explore le tableau $chiffres afin d'y afficher toutes les entrées qui s'y trouvent
+foreach ($chiffres as $caractere) {
+    $nombre .= $caractere;
+}
+##### On a fini de créer le nombre aléatoire, on le rentre maintenant dans une variable de session #####
+$_SESSION['aleat_nbr'] = $nombre;
+// On détruit les variables inutiles :
+unset($chiffre);
+unset($i);
+unset($caractere);
+unset($chiffres);
+
+$x = mt_rand(1,60);
+$y = mt_rand(1,40);
+
+imagestring($_img, 5, $x, $y, $nombre, $avant_plan);
+
+imagepng($_img);
+?>
+=======
 <?php
 //
 //A simple PHP CAPTCHA script
@@ -19,8 +71,8 @@ function captcha($config = array()) {
     // Default values
     $captcha_config = array(
         'code' => '',
-        'min_length' => 5,
-        'max_length' => 5,
+        'min_length' => 8,
+        'max_length' => 8,
         'backgrounds' => array(
             $bg_path . '45-degree-fabric.png',
             $bg_path . 'cloth-alike.png',
@@ -36,10 +88,10 @@ function captcha($config = array()) {
         ),
         'characters' => '0123456789',
         'min_font_size' => 14,
-        'max_font_size' => 14,
+        'max_font_size' => 16,
         'color' => '#666',
-        'angle_min' => 0,
-        'angle_max' => 10,
+        'angle_min' => -30,
+        'angle_max' => 30,
         'shadow' => true,
         'shadow_color' => '#fff',
         'shadow_offset_x' => -1,
@@ -63,21 +115,22 @@ function captcha($config = array()) {
     srand(microtime() * 100);
     
     // Generate CAPTCHA code if not set by user
-    if( empty($captcha_config['code']) ) {
+    if( $captcha_config['code']=='' ) {
         $captcha_config['code'] = '';
-        $length = rand($captcha_config['min_length'], $captcha_config['max_length']);
+        $length = mt_rand($captcha_config['min_length'], $captcha_config['max_length']);
         while( strlen($captcha_config['code']) < $length ) {
             $captcha_config['code'] .= substr($captcha_config['characters'], rand() % (strlen($captcha_config['characters'])), 1);
         }
     }
     
-    // Generate HTML for image src
+
+// Generate HTML for image src
     $image_src = '?_CAPTCHA&amp;t=' . urlencode(microtime());
-        
+    $nbr = $captcha_config['code'];    
     $_SESSION['_CAPTCHA']['config'] = serialize($captcha_config);
-    
+
     return array(
-        'code' => $captcha_config['code'],
+        'code' => $nbr,
         'image_src' => $image_src
     );
     
@@ -107,7 +160,7 @@ if( !function_exists('hex2rgb') ) {
 // Draw the image
 if( isset($_GET['_CAPTCHA']) ) {
     
-    session_start();
+    //session_start();
     
     $captcha_config = unserialize($_SESSION['_CAPTCHA']['config']);
     if( !$captcha_config ) exit();
@@ -164,3 +217,4 @@ if( isset($_GET['_CAPTCHA']) ) {
     imagepng($captcha);
     
 }
+>>>>>>> 1b053e17c0a55f8b946a30a547e97c3c4a5c22e4

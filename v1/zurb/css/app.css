@@ -1,0 +1,50 @@
+body {
+
+background-color:#011635;
+color:white;
+}
+
+#contenu {
+background-color:#F3F3F3;
+
+}
+#footer {
+background-color : #011635;
+
+
+}
+
+
+#footer, h4, h3{
+color:#F3F3F3;
+
+}
+#header {
+background-color#013962;
+
+}
+
+
+fieldset {
+
+background-color:#565658;
+width:100%;
+}
+
+
+fieldset legend {
+
+background-color:#005890;
+
+}
+
+.top-bar {
+
+background-color #073D63;
+
+}
+
+.top-bar-section li a {
+
+background-color:#073D63;
+}

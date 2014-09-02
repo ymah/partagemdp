@@ -1,30 +1,20 @@
 <?php
-$_SESSION['index']++;
-session_save_path('temp');
-session_start();
-$_SESSION['index']++;
-
-var_dump($_SESSION);
-?>
-<!DOCTYPE html>
-<html>
-<meta charset="utf-8" />
-    <title>Partage Mot de passe</title>
-    <head>
-    <title>Inscription</title>
-    </head>
-    <body>
+//session_save_path('file/temp');
+//session_start();
 
 
-<?php
-$_SESSION['index']++;
-print_r($_SESSION['captcha']['code']);
-echo "<br/>";
-$_SESSION['index']++;
-print_r($_POST['code']);
-print_r("<br/>".$_SESSION['index']);
+
+
+$code = htmlspecialchars($_POST['code'], ENT_COMPAT,'ISO-8859-1', true);
+$aes = htmlspecialchars($_POST['aes'], ENT_COMPAT,'ISO-8859-1', true);
+$_SESSION['aes'] = $aes;
+    
+if($_SESSION['aleat_nbr']== $code 
+and !empty($aes)){
+    include('traitement.php');    
+}else{
+     header('Location: '.$_SESSION['url'].'&codeError=1');
+}
 ?>
 
 
-</body>
-</html>
