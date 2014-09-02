@@ -19,12 +19,29 @@
       </ul>      
       <section class="top-bar-section">
         <ul class="right">
+<?php if(isset($_SESSION['admin'])){
+?>
+
           <li>
             <a href="index.php">
               Saisie des identifiants
             </a>
-
           </li>
+	<li>
+	<a href="index.php?clean">
+		Purge complete des mots de passes.
+	</a>
+	</li>
+	<li>
+	<a href="index.php?deconnexion">
+		Deconnexion
+	</a>
+
+
+	</li>
+<?php
+}
+?>
         </ul>
         
       </section>

@@ -1,7 +1,6 @@
 <?php
 
 include('Crypt/RSA.php');
-include('Crypt/AES.php');
 
 
 ////////////////////////
@@ -66,7 +65,7 @@ if(isset($_GET['id']) and isset($_GET['mdp']) and isset($_SESSION['admin'])){
 
     
     $rsa = new Crypt_RSA();
-    extract($rsa->createKey(1500));
+    extract($rsa->createKey(2048));
     $rsa->loadKey($publickey);
     
     $resID = base64_encode($rsa->encrypt($id));
@@ -75,28 +74,34 @@ if(isset($_GET['id']) and isset($_GET['mdp']) and isset($_SESSION['admin'])){
     
     $lien = curPageURL()."?code=$nbr&time=".time()."";
     $pk = generateRandomString(8);
-    $des = new Crypt_AES();
-    $des->setKey($pk);
+
+
+    $resID = base64_encode($rsa->encrypt($id));
+    $resMDP = base64_encode($rsa->encrypt($mdp));
     
-    $cle = base64_encode($des->encrypt($privatekey));
-    if(!file_put_contents("file/key/$nbr.crt","$resID;$resMDP"))//on enregistre le resultat dans le fichier de sortie
+    if(!file_put_contents("file/key/".$pk.$nbr.".crt","$resID;$resMDP")){//on enregistre le resultat dans le fichier de sortie;
         echo ('Exception reçue : erreur ecriture dans le fichier<br/>');
+}
 ?>
 <div class="row">
 <div class="large-12 columns">
 <?php
 echo "
-<table style=\"table-layout:fixed;\">
-<tr>
-<td>Identifiant</td>
-<td>$id</td>
-</tr>
+<p style=\"color:black\">Partagez ces informations avec le client concerné, de maniere preferable, envoyer la clé AES via un autre canal.</p> 
+<table style=\"table-layout:auto;\">
+<thead>
+<th>
+Fiche à envoyer
+</th>
+
+</thead>
+<tbody>
 <tr>
 <tr>
 <td>Clé RSA à communiquer au client par email</td>
-<td>$cle</td>
+<td>$privatekey</td>
 </tr>
-<td>Clé AES</td>
+<td>Code unique à communiquer via un autre canal (SMS ou telephone)</td>
 <td>$pk<br/><br/></td>
 </tr>
 <tr>
@@ -104,6 +109,7 @@ echo "
 <td>Lien</td>
 <td>$lien</td>
 </tr>
+</tbody>
 </table>
 ";
 ?>
@@ -114,7 +120,9 @@ echo "
 
 
 ?>
-    <form action="index.php" method="GET">
+    
+<p style="color:black">Veuillez noter ici l'identifiant et le mot de passe que vous desirez partager.</p>
+<form action="index.php" method="GET">
     <p><label>Identifiant: </label><input name="id" type="text"/></p>
 
     <p><label>Mot de passe: </label><input name="mdp" type="text"/></p>

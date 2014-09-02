@@ -31,6 +31,22 @@ if(isset($_POST['IDADMIN']) and isset($_POST['MDPADMIN'])){
     }
         
 }
+if(isset($_GET['clean']) and isset($_SESSION['admin'])){
+
+foreach(glob("file/key/*.crt") as $filename){
+	unlink($filename);
+
+}
+
+
+}
+if(isset($_GET['deconnexion']) and isset($_SESSION['admin'])){
+session_start();
+session_destroy();
+header('Location: index.php');
+exit;
+
+}
 ?>
 
 
@@ -83,6 +99,7 @@ if(isset($_GET['code']) and isset($_GET['time'])){
 
 }else if(isset($_POST['code'])){
     include('validation.php');
+
 }else if(isset($_GET['codeError']) && $_GET['codeError']==2){
     include('expiration.php');
 }else if(isset($_SESSION['admin']) and ($_SESSION['admin'] == $identifiantAdmin)) {

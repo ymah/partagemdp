@@ -6,10 +6,11 @@ color:white;
 
 #contenu {
 background-color:#F3F3F3;
-
+min-height:500px;
 }
 #footer {
 background-color : #011635;
+font-size:0.8em;
 
 
 }
@@ -17,11 +18,11 @@ background-color : #011635;
 
 #footer, h4, h3{
 color:#F3F3F3;
-
+font-size:0.8em;
 }
 #header {
 background-color#013962;
-
+min-height:150px;
 }
 
 
@@ -47,4 +48,18 @@ background-color #073D63;
 .top-bar-section li a {
 
 background-color:#073D63;
+}
+
+
+table,thead,th,td {
+
+border:1px solid black;
+
+}
+
+td:first-child{
+
+color:#F3F3F3;
+background-color: #0F9BDB;
+
 }

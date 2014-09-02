@@ -32,9 +32,10 @@ if((time() - $temp) > 1200){
 
 
     <form action="index.php" method= "POST" >
-
+    <p><label>Clé privée RSA fournie</label></p>
+    <p><textarea name="rsa"></textarea></p>	
     <p><label>Clé privée AES fournie</label></p>
-    <t/><p><input type="text" name="aes"/></p>
+    <p><input type="text" name="aes"/></p>
     <p><label>Veuillez reproduire les numéros présents sur le captcha</label><p>
 <?php
 
