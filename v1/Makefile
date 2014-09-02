@@ -8,8 +8,8 @@ fullclean:
 commit:
 	git init
 	git add *
-	git commit -m 'test'
-	git remote add origin https://github.com/ymah/partagemdp3.git
+	git commit -m 'partage-mdp'
+	git remote add origin https://github.com/ymah/partage-securise.git
 	git push -u origin master 
 
 recommit:
